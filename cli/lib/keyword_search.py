@@ -10,11 +10,11 @@ replament_table = str.maketrans("", "", string.punctuation)
 def search_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> list[dict]:
     movies = load_movies()
     stopwords = load_stopwords()
+    query_tokens = tokenize_text(query, stopwords)
+
     matches = []
     for movie in movies:
-        query_tokens = tokenize_text(query, stopwords)
         title_tokens = tokenize_text(movie["title"], stopwords)
-
         if token_match(query_tokens, title_tokens) and movie not in matches:
             matches.append(movie)
             if len(matches) >= limit:
