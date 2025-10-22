@@ -1,4 +1,8 @@
+import string
+
 from .search_utils import DEFAULT_SEARCH_LIMIT, load_movies
+
+replament_table = str.maketrans("", "", string.punctuation)
 
 
 def search_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> list[dict]:
@@ -14,4 +18,4 @@ def search_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> list[dict]:
 
 
 def preprocess_text(text: str) -> str:
-    return text.lower()
+    return text.lower().translate(replament_table)
