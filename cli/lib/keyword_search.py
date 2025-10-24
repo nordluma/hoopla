@@ -48,12 +48,6 @@ def build_command() -> None:
     idx.build()
     idx.save()
 
-    docs = idx.get_documents("merida")
-    if len(docs) > 0:
-        print(f"First document for token 'merida' = {docs[0]}")
-    else:
-        print("Not matches found")
-
 
 def search_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> list[dict]:
     movies = load_movies()
