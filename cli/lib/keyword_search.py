@@ -57,17 +57,26 @@ def build_command() -> None:
 
 
 def search_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> list[dict]:
-    movies = load_movies()
+    idx = InvertedIndex()
+    idx.load()
+
     stopwords = load_stopwords()
     query_tokens = tokenize_text(query, stopwords)
 
-    matches = []
-    for movie in movies:
-        title_tokens = tokenize_text(movie["title"], stopwords)
-        if token_match(query_tokens, title_tokens) and movie not in matches:
-            matches.append(movie)
-            if len(matches) >= limit:
-                break
+    seen, matches = set(), []
+    for token in query_tokens:
+        res = idx.get_documents(token)
+        for movie_id in res:
+            if movie_id in seen:
+                continue
+            seen.add(movie_id)
+            doc = idx.docmap[movie_id]
+            if not doc:
+                continue
+            matches.append(doc)
+
+        if len(matches) >= limit:
+            break
 
     return matches
 
