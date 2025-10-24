@@ -23,6 +23,13 @@ class InvertedIndex:
             self.docmap[doc_id] = m
             self.__add_document(doc_id, f"{m['title']} {m['description']}")
 
+    def load(self):
+        with open(self.idx_path, "rb") as f:
+            self.index = pickle.load(f)
+
+        with open(self.docmap_path, "rb") as f:
+            self.docmap = pickle.load(f)
+
     def save(self):
         os.makedirs(CACHE_DIR, exist_ok=True)
 
