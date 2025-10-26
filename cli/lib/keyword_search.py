@@ -126,6 +126,12 @@ def idf_command(term: str) -> float:
     return idx.get_idf(term)
 
 
+def tfidf_command(doc_id: int, term: str) -> float:
+    idx = InvertedIndex()
+    idx.load()
+    return idx.get_tf_idf(doc_id, term)
+
+
 def preprocess_text(text: str) -> str:
     return text.lower().translate(replament_table)
 
