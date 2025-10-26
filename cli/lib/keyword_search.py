@@ -47,6 +47,16 @@ class InvertedIndex:
         doc_ids = self.index.get(term, set())
         return sorted(list(doc_ids))
 
+    def get_tf(self, doc_id: int, term: str) -> int:
+        if doc_id not in self.term_frequencies:
+            return 0
+
+        tokens = tokenize_text(term, load_stopwords())
+        if len(tokens) != 1:
+            raise ValueError("term must be a single token")
+
+        return self.term_frequencies[doc_id][tokens[0]]
+
     def __add_document(self, doc_id: int, text: str):
         stopwords = load_stopwords()
         tokens = tokenize_text(text, stopwords)
