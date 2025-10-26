@@ -1,3 +1,4 @@
+import math
 import pickle
 import os
 import string
@@ -56,6 +57,15 @@ class InvertedIndex:
             raise ValueError("term must be a single token")
 
         return self.term_frequencies[doc_id][tokens[0]]
+
+    def get_idf(self, term: str) -> float:
+        tokens = tokenize_text(term, load_stopwords())
+        if len(tokens) != 1:
+            raise ValueError("term must be as single token")
+
+        doc_count = len(self.docmap)
+        term_doc_count = len(self.index[tokens[0]])
+        return math.log((doc_count + 1) / (term_doc_count + 1))
 
     def __add_document(self, doc_id: int, text: str):
         stopwords = load_stopwords()
