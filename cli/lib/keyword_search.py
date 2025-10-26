@@ -67,6 +67,11 @@ class InvertedIndex:
         term_doc_count = len(self.index[tokens[0]])
         return math.log((doc_count + 1) / (term_doc_count + 1))
 
+    def get_tf_idf(self, doc_id: int, term: str) -> float:
+        tf = self.get_tf(doc_id, term)
+        idf = self.get_idf(term)
+        return tf * idf
+
     def __add_document(self, doc_id: int, text: str):
         stopwords = load_stopwords()
         tokens = tokenize_text(text, stopwords)
