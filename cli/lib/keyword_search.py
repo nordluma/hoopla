@@ -99,6 +99,12 @@ def search_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> list[dict]:
     return matches
 
 
+def tf_command(doc_id: int, term: str) -> int:
+    idx = InvertedIndex()
+    idx.load()
+    return idx.get_tf(doc_id, term)
+
+
 def preprocess_text(text: str) -> str:
     return text.lower().translate(replament_table)
 
