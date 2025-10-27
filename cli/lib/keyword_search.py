@@ -6,7 +6,13 @@ import string
 from collections import Counter, defaultdict
 from nltk.stem import PorterStemmer
 
-from .search_utils import CACHE_DIR, DEFAULT_SEARCH_LIMIT, load_movies, load_stopwords
+from .search_utils import (
+    BM25_K1,
+    CACHE_DIR,
+    DEFAULT_SEARCH_LIMIT,
+    load_movies,
+    load_stopwords,
+)
 
 replament_table = str.maketrans("", "", string.punctuation)
 
@@ -81,6 +87,10 @@ class InvertedIndex:
         df = len(self.get_documents(tokens[0]))
 
         return math.log((n - df + 0.5) / (df + 0.5) + 1)
+
+    def get_bm25_tf(self, doc_id: int, term: str, k1: float = BM25_K1) -> float:
+        tf = self.get_tf(doc_id, term)
+        return (tf * (k1 + 1)) / (tf + k1)
 
     def __add_document(self, doc_id: int, text: str):
         stopwords = load_stopwords()
