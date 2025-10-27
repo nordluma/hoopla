@@ -61,7 +61,7 @@ class InvertedIndex:
     def get_idf(self, term: str) -> float:
         tokens = tokenize_text(term, load_stopwords())
         if len(tokens) != 1:
-            raise ValueError("term must be as single token")
+            raise ValueError("term must be a single token")
 
         doc_count = len(self.docmap)
         term_doc_count = len(self.index[tokens[0]])
