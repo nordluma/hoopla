@@ -72,6 +72,16 @@ class InvertedIndex:
         idf = self.get_idf(term)
         return tf * idf
 
+    def get_bm25_idf(self, term: str) -> float:
+        tokens = tokenize_text(term, load_stopwords())
+        if len(tokens) != 1:
+            raise ValueError("term must be a single token")
+
+        n = len(self.docmap)
+        df = len(self.get_documents(tokens[0]))
+
+        return math.log((n - df + 0.5) / (df + 0.5) + 1)
+
     def __add_document(self, doc_id: int, text: str):
         stopwords = load_stopwords()
         tokens = tokenize_text(text, stopwords)
