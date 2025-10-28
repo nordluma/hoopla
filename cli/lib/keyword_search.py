@@ -219,6 +219,12 @@ def bm25_tf_command(
     return idx.get_bm25_tf(doc_id, term, k1, b)
 
 
+def bm25_search_command(query: str) -> list[dict]:
+    idx = InvertedIndex()
+    idx.load()
+    return idx.bm25_search(query, DEFAULT_SEARCH_LIMIT)
+
+
 def preprocess_text(text: str) -> str:
     return text.lower().translate(replament_table)
 
