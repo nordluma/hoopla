@@ -16,6 +16,36 @@ class SemanticSearch:
         self.documents = None
         self.document_map = {}
 
+    def search(self, query: str, limit: int):
+        if self.embeddings is None or self.embeddings.size == 0:
+            raise ValueError(
+                "No embeddings loaded. Call `load_or_create_embeddings` first"
+            )
+
+        if self.documents is None or len(self.documents) == 0:
+            raise ValueError(
+                "No embeddings loaded. Call `load_or_create_embeddings` first"
+            )
+
+        embedding = self.generate_embedding(query)
+
+        res = [
+            (cosine_similarity(embedding, doc_embedding), self.documents[i])
+            for i, doc_embedding in enumerate(self.embeddings)
+        ]
+        res = sorted(res, key=lambda x: x[0], reverse=True)
+
+        return list(
+            map(
+                lambda item: {
+                    "score": item[0],
+                    "title": item[1]["title"],
+                    "description": item[1]["description"],
+                },
+                res[:limit],
+            )
+        )
+
     def load_or_create_embeddings(self, documents: list[dict]):
         self.documents = documents
         for doc in self.documents:
@@ -52,6 +82,16 @@ class SemanticSearch:
             raise ValueError("text cannot be empty or only whitespace")
 
         return self.model.encode([text])[0]
+
+
+def cosine_similarity(vec1, vec2) -> float:
+    dot_product = np.dot(vec1, vec2)
+    norm1 = np.linalg.norm(vec1)
+    norm2 = np.linalg.norm(vec2)
+    if norm1 == 0 or norm2 == 0:
+        return 0
+
+    return dot_product / (norm1 * norm2)
 
 
 def embed_query_text(query: str):
