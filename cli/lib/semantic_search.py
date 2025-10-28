@@ -47,7 +47,8 @@ class SemanticSearch:
         return self.embeddings
 
     def generate_embedding(self, text: str) -> Tensor:
-        if text.strip() == "":
+        text = text.strip()
+        if text == "":
             raise ValueError("text cannot be empty or only whitespace")
 
         return self.model.encode([text])[0]
