@@ -53,6 +53,16 @@ class SemanticSearch:
         return self.model.encode([text])[0]
 
 
+def verify_embeddings():
+    search = SemanticSearch()
+    documents = load_movies()
+    embeddings = search.load_or_create_embeddings(documents)
+    print(f"Number of docs: {len(documents)}")
+    print(
+        f"Embeddings shape: {embeddings.shape[0]} vectors in {embeddings.shape[1]} dimensions"
+    )
+
+
 def embed_text(text: str):
     search = SemanticSearch()
     embedding = search.generate_embedding(text)
