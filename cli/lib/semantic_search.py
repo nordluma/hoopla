@@ -94,6 +94,15 @@ def cosine_similarity(vec1, vec2) -> float:
     return dot_product / (norm1 * norm2)
 
 
+def search(query: str, limit: int):
+    search = SemanticSearch()
+    search.load_or_create_embeddings(load_movies())
+    for i, m in enumerate(search.search(query, limit), 1):
+        print(f"{i}. {m['title']} (score: {m['score']:.4f})")
+        print(f"\t{m['description'][:100]}...")
+        print()
+
+
 def embed_query_text(query: str):
     search = SemanticSearch()
     embedding = search.generate_embedding(query)
