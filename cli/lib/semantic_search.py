@@ -4,7 +4,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from torch import Tensor
 
-from .search_utils import CACHE_DIR, load_movies
+from .search_utils import CACHE_DIR, DEFAULT_CHUNK_SIZE, load_movies
 
 MOVIE_EMBEDDINGS_PATH = os.path.join(CACHE_DIR, "movie_embeddings.npy")
 
@@ -92,6 +92,19 @@ def cosine_similarity(vec1, vec2) -> float:
         return 0
 
     return dot_product / (norm1 * norm2)
+
+
+def fixed_size_chunking(text: str, chunk_size: int = DEFAULT_CHUNK_SIZE) -> list:
+    chunks = []
+    words = text.split()
+
+    i = 0
+    while i < len(words):
+        chunk_words = words[i : i + chunk_size]
+        chunks.append(" ".join(chunk_words))
+        i += chunk_size
+
+    return chunks
 
 
 def search(query: str, limit: int):
