@@ -4,7 +4,12 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from torch import Tensor
 
-from .search_utils import CACHE_DIR, DEFAULT_CHUNK_SIZE, load_movies
+from .search_utils import (
+    CACHE_DIR,
+    DEFAULT_CHUNK_OVERLAP,
+    DEFAULT_CHUNK_SIZE,
+    load_movies,
+)
 
 MOVIE_EMBEDDINGS_PATH = os.path.join(CACHE_DIR, "movie_embeddings.npy")
 
@@ -94,15 +99,20 @@ def cosine_similarity(vec1, vec2) -> float:
     return dot_product / (norm1 * norm2)
 
 
-def fixed_size_chunking(text: str, chunk_size: int = DEFAULT_CHUNK_SIZE) -> list:
+def fixed_size_chunking(
+    text: str,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+    overlap: int = DEFAULT_CHUNK_OVERLAP,
+) -> list[str]:
     chunks = []
     words = text.split()
 
     i = 0
-    while i < len(words):
+    n_words = len(words)
+    while i < n_words - overlap:
         chunk_words = words[i : i + chunk_size]
         chunks.append(" ".join(chunk_words))
-        i += chunk_size
+        i += chunk_size - overlap
 
     return chunks
 
