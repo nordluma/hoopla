@@ -37,32 +37,31 @@ def main():
     embed_query_parser.add_argument("query", type=str, help="Query to embed")
 
     search_parser = subparsers.add_parser(
-        "search", help="Search movies with semantic similarity"
+        "search", help="Search for movies with semantic search"
     )
     search_parser.add_argument("query", type=str, help="Search query")
     search_parser.add_argument(
         "--limit",
         type=int,
-        nargs="?",
         default=DEFAULT_SEARCH_LIMIT,
-        help="Optional limit for search results",
+        help="Number of results to return",
     )
 
-    chunk_parser = subparsers.add_parser("chunk", help="Chunk the query into chunks")
-    chunk_parser.add_argument(
-        "query", type=str, help="Search query to split into chunks"
+    chunk_parser = subparsers.add_parser(
+        "chunk", help="Split text into fixed-size chunks with optional overlap"
     )
+    chunk_parser.add_argument("query", type=str, help="Text to chunk")
     chunk_parser.add_argument(
         "--chunk-size",
         type=int,
         default=DEFAULT_CHUNK_SIZE,
-        help="Optional size of chunks",
+        help="Size of each chunk in words",
     )
     chunk_parser.add_argument(
         "--overlap",
         type=int,
         default=DEFAULT_CHUNK_OVERLAP,
-        help="Overlap between the chunks",
+        help="Number of words to overlap between chunks",
     )
 
     args = parser.parse_args()
