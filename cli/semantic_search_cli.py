@@ -2,7 +2,11 @@
 
 import argparse
 
-from lib.search_utils import DEFAULT_CHUNK_SIZE, DEFAULT_SEARCH_LIMIT
+from lib.search_utils import (
+    DEFAULT_CHUNK_OVERLAP,
+    DEFAULT_CHUNK_SIZE,
+    DEFAULT_SEARCH_LIMIT,
+)
 from lib.semantic_search import (
     chunk_text,
     embed_query_text,
@@ -51,9 +55,14 @@ def main():
     chunk_parser.add_argument(
         "--chunk-size",
         type=int,
-        nargs="?",
         default=DEFAULT_CHUNK_SIZE,
         help="Optional size of chunks",
+    )
+    chunk_parser.add_argument(
+        "--overlap",
+        type=int,
+        default=DEFAULT_CHUNK_OVERLAP,
+        help="Overlap between the chunks",
     )
 
     args = parser.parse_args()
@@ -70,7 +79,7 @@ def main():
         case "search":
             search(args.query, args.limit)
         case "chunk":
-            chunk_text(args.query, args.chunk_size)
+            chunk_text(args.query, args.chunk_size, args.overlap)
         case _:
             parser.print_help()
 

@@ -126,8 +126,12 @@ def search(query: str, limit: int):
         print()
 
 
-def chunk_text(text: str, chunk_size: int = DEFAULT_CHUNK_SIZE):
-    chunks = fixed_size_chunking(text, chunk_size)
+def chunk_text(
+    text: str,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+    overlap: int = DEFAULT_CHUNK_OVERLAP,
+) -> None:
+    chunks = fixed_size_chunking(text, chunk_size, overlap)
 
     print(f"Chunking {len(text)} characters")
     for i, chunk in enumerate(chunks, 1):
