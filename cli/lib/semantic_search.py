@@ -116,6 +116,14 @@ def search(query: str, limit: int):
         print()
 
 
+def chunk_text(text: str, chunk_size: int = DEFAULT_CHUNK_SIZE):
+    chunks = fixed_size_chunking(text, chunk_size)
+
+    print(f"Chunking {len(text)} characters")
+    for i, chunk in enumerate(chunks, 1):
+        print(f"{i}. {chunk}")
+
+
 def embed_query_text(query: str):
     search = SemanticSearch()
     embedding = search.generate_embedding(query)
