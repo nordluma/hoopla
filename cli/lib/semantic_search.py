@@ -147,6 +147,18 @@ def search(query: str, limit: int):
         print()
 
 
+def semantic_chunk_text(
+    text: str,
+    max_chunk_size: int = DEFAULT_MAX_SEMANTIC_CHUNK_SIZE,
+    overlap: int = DEFAULT_SEMANTIC_CHUNK_OVERLAP,
+) -> None:
+    chunks = semantic_chunking(text, max_chunk_size, overlap)
+
+    print(f"Semantically chunking {len(text)} characters")
+    for i, chunk in enumerate(chunks, 1):
+        print(f"{i}. {chunk}")
+
+
 def chunk_text(
     text: str,
     chunk_size: int = DEFAULT_CHUNK_SIZE,

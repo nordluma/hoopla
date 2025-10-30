@@ -5,13 +5,16 @@ import argparse
 from lib.search_utils import (
     DEFAULT_CHUNK_OVERLAP,
     DEFAULT_CHUNK_SIZE,
+    DEFAULT_MAX_SEMANTIC_CHUNK_SIZE,
     DEFAULT_SEARCH_LIMIT,
+    DEFAULT_SEMANTIC_CHUNK_OVERLAP,
 )
 from lib.semantic_search import (
     chunk_text,
     embed_query_text,
     embed_text,
     search,
+    semantic_chunk_text,
     verify_embeddings,
     verify_model,
 )
@@ -64,6 +67,24 @@ def main():
         help="Number of words to overlap between chunks",
     )
 
+    semantic_chunk_parser = subparsers.add_parser(
+        "semantic_chunk",
+        help="Split text into sentence chunks with optional overlap",
+    )
+    semantic_chunk_parser.add_argument("query", type=str, help="Text to chunk")
+    semantic_chunk_parser.add_argument(
+        "--max-chunk-size",
+        type=int,
+        default=DEFAULT_MAX_SEMANTIC_CHUNK_SIZE,
+        help="Number of sentenctes in each chunk",
+    )
+    semantic_chunk_parser.add_argument(
+        "--overlap",
+        type=int,
+        default=DEFAULT_SEMANTIC_CHUNK_OVERLAP,
+        help="Number of sentences to overlap between chunks",
+    )
+
     args = parser.parse_args()
 
     match args.command:
@@ -79,6 +100,8 @@ def main():
             search(args.query, args.limit)
         case "chunk":
             chunk_text(args.query, args.chunk_size, args.overlap)
+        case "semantic_chunk":
+            semantic_chunk_text(args.query, args.max_chunk_size, args.overlap)
         case _:
             parser.print_help()
 
