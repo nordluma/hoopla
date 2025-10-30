@@ -1,4 +1,5 @@
 import os
+import re
 import numpy as np
 
 from sentence_transformers import SentenceTransformer
@@ -8,6 +9,8 @@ from .search_utils import (
     CACHE_DIR,
     DEFAULT_CHUNK_OVERLAP,
     DEFAULT_CHUNK_SIZE,
+    DEFAULT_MAX_SEMANTIC_CHUNK_SIZE,
+    DEFAULT_SEMANTIC_CHUNK_OVERLAP,
     load_movies,
 )
 
@@ -113,6 +116,24 @@ def fixed_size_chunking(
         chunk_words = words[i : i + chunk_size]
         chunks.append(" ".join(chunk_words))
         i += chunk_size - overlap
+
+    return chunks
+
+
+def semantic_chunking(
+    text: str,
+    max_chunk_size: int = DEFAULT_MAX_SEMANTIC_CHUNK_SIZE,
+    overlap: int = DEFAULT_SEMANTIC_CHUNK_OVERLAP,
+) -> list[str]:
+    chunks = []
+    parts = re.split(r"(?<=[.!?])\s+", text)
+
+    i = 0
+    n_sentences = len(parts)
+    while i < n_sentences - overlap:
+        chunk_sentences = parts[i : i + max_chunk_size]
+        chunks.append(" ".join(chunk_sentences))
+        i += max_chunk_size - overlap
 
     return chunks
 
