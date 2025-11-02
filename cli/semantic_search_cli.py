@@ -10,6 +10,7 @@ from lib.search_utils import (
     DEFAULT_SEMANTIC_CHUNK_OVERLAP,
 )
 from lib.semantic_search import (
+    build_semantic_chunks,
     chunk_text,
     embed_query_text,
     embed_text,
@@ -27,6 +28,10 @@ def main():
     subparsers.add_parser("verify", help="Verify that the embedding model is loaded")
     subparsers.add_parser(
         "verify_embeddings", help="Verify embeddings for the movie set"
+    )
+    subparsers.add_parser(
+        "embed_chunks",
+        help="Generate semantically chunked embeddings for movie dataset",
     )
 
     embed_parser = subparsers.add_parser(
@@ -92,6 +97,8 @@ def main():
             verify_model()
         case "verify_embeddings":
             verify_embeddings()
+        case "embed_chunks":
+            build_semantic_chunks()
         case "embedquery":
             embed_query_text(args.query)
         case "embed_text":

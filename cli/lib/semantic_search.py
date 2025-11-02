@@ -245,6 +245,14 @@ def embed_query_text(query: str):
     print(f"Shape: {embedding.shape}")
 
 
+def build_semantic_chunks() -> None:
+    movies = load_movies()
+    search = ChunkedSemanticSearch()
+    print("Generating chunk embeddings")
+    embeddings = search.load_or_create_chunk_embeddings(movies)
+    print(f"Generated {len(embeddings)} chunked embeddings")
+
+
 def verify_embeddings():
     search = SemanticSearch()
     documents = load_movies()
