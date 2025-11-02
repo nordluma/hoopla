@@ -15,6 +15,7 @@ from lib.semantic_search import (
     embed_query_text,
     embed_text,
     search,
+    search_chunked_command,
     semantic_chunk_text,
     verify_embeddings,
     verify_model,
@@ -90,6 +91,14 @@ def main():
         help="Number of sentences to overlap between chunks",
     )
 
+    search_chunked_parser = subparsers.add_parser(
+        "search_chunked", help="Search using chunked embeddings"
+    )
+    search_chunked_parser.add_argument("query", type=str, help="Search query")
+    search_chunked_parser.add_argument(
+        "--limit", type=int, default=5, help="Number of results to return"
+    )
+
     args = parser.parse_args()
 
     match args.command:
@@ -105,6 +114,13 @@ def main():
             embed_text(args.text)
         case "search":
             search(args.query, args.limit)
+        case "search_chunked":
+            result = search_chunked_command(args.query, args.limit)
+            print(f"Query: {result['query']}")
+            print("Results:")
+            for i, res in enumerate(result["results"]):
+                print(f"\n{i}. {res['title']} (score: {res['score']:.4f})")
+                print(f"\t{res['document']}...")
         case "chunk":
             chunk_text(args.query, args.chunk_size, args.overlap)
         case "semantic_chunk":

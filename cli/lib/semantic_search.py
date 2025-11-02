@@ -251,6 +251,13 @@ def semantic_chunking(
     return chunks
 
 
+def search_chunked_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> dict:
+    search = ChunkedSemanticSearch()
+    search.load_or_create_chunk_embeddings(load_movies())
+    results = search.search_chunks(query, limit)
+    return {"query": query, "results": results}
+
+
 def search(query: str, limit: int):
     search = SemanticSearch()
     search.load_or_create_embeddings(load_movies())
